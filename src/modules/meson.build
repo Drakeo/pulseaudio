@@ -268,6 +268,8 @@ all_modules += [
 # FIXME: meson doesn't support multiple RPATH arguments currently
 rpath_dirs = join_paths(privlibdir) + ':' + join_paths(modlibexecdir)
 
+common_args = '-I@0@'.format(meson.current_build_dir())
+
 foreach m : all_modules
   name = m[0]
   sources = m[1]
@@ -280,7 +282,8 @@ foreach m : all_modules
     sources,
     headers,
     include_directories : [configinc, topinc],
-    c_args : [pa_c_args, server_c_args, '-DPA_MODULE_NAME=' + name.underscorify()] + extra_flags,
+    cpp_args : common_args,
+    c_args : [common_args, pa_c_args, server_c_args, '-DPA_MODULE_NAME=' + name.underscorify()] + extra_flags,
     install : true,
     install_rpath : rpath_dirs,
     install_dir : modlibexecdir,
